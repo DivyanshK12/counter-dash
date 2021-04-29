@@ -1,17 +1,21 @@
-from flask import Flask, request, Response
-import csv
+from flask import Flask, request, Response, redirect
 from datetime import datetime, timedelta, date
+import pandas as pd
+import csv
+import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or "Randomness1234567898763535"
 
 @app.route("/receiver", methods=["GET", "POST"])
 def receiver():
     data = request.get_json(force = True)
+    td = getdate()
+    savedate = date(day=td.day, month=td.month, year=td.year)
     with open("data.csv", 'a', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         td = getdate()
-        print(td.__dir__())
         savedate = date(day=td.day, month=td.month, year=td.year)
         writer.writerow([data['user'], int(data['count']), savedate])
     response = Response(status=200)
@@ -27,4 +31,3 @@ if __name__ == "__main__":
         writer = csv.writer(csvfile, delimiter=',',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(["User", "Count", "Date"])
-    app.run()
