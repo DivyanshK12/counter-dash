@@ -7,8 +7,6 @@ import pickle
 
 app = dash.Dash(__name__,
                 requests_pathname_prefix='/view_count/')
-# df = pd.read_pickle("data.pickle")
-# fig = px.scatter(df, x="Date", y="Count", color="User", size="Count")
 
 def serve_layout():
     df = pd.read_csv("data.csv")
